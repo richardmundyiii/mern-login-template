@@ -29,9 +29,7 @@ export default function NavBar({ user }) {
 
   const navLinks = [
     { title: "Home", path: "/" },
-    { title: "Schedule", path: "/schedule" },
     // ... other links
-    { title: "Contact", path: "/contact" },
   ];
 
   const drawer = (
