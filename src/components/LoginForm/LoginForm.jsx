@@ -31,6 +31,7 @@ export default function SignupForm({ handleRegOrLog }) {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    const rememberMe = document.getElementById("rememberMe").checked;
     try {
       const user = await userApi.login(credentials);
       setCredentials(user);
@@ -81,6 +82,7 @@ export default function SignupForm({ handleRegOrLog }) {
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
+            id="rememberMe"
           />
           <Button
             type="submit"
@@ -91,9 +93,11 @@ export default function SignupForm({ handleRegOrLog }) {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
+              <Button>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Button>
             </Grid>
             <Grid item>
               <Button onClick={handleRegOrLog}>
