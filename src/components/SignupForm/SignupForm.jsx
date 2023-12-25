@@ -11,8 +11,11 @@ import {
   Button,
   FormControl,
   FormControlLabel,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import CssBaseline from "@mui/material/CssBaseline";
 
 export default function SignupForm({ handleRegOrLog }) {
@@ -43,6 +46,11 @@ export default function SignupForm({ handleRegOrLog }) {
   async function handleSubmit(event) {
     event.preventDefault();
   }
+
+  //Toggle password visibility
+  // function handleClickShowPassword(event) {
+  //   setShowPassword((preShowPassword) => !prevShowPassword);
+  // }
 
   //Disable registration if both passwords don't match
   const disable = registration.password !== registration.confirmPassword;
@@ -91,10 +99,19 @@ export default function SignupForm({ handleRegOrLog }) {
             fullWidth
             name="password"
             label="Password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             id="password"
             onChange={handleChange}
             autoComplete="current-password"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton aria-label="Toggle Password Visiability">
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           <TextField
             margin="normal"
@@ -106,6 +123,15 @@ export default function SignupForm({ handleRegOrLog }) {
             id="confirmPassword"
             onChange={handleChange}
             autoComplete="current-password"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton aria-label="Toggle Password Visiability">
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           <Button
             type="submit"
