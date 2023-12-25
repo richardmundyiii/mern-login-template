@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Box,
@@ -8,15 +10,34 @@ import {
   Grid,
   Link,
   Button,
-  FormControl,
   FormControlLabel,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import CssBaseline from "@mui/material/CssBaseline";
+import * as userApi from "../../utilities/users-api";
 
 export default function SignupForm({ handleRegOrLog }) {
+  const [credentials, setCredentials] = useState({
+    email: "",
+    password: "",
+  });
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+
+  function handleChange(event) {
+    setCredentials({ ...credentials, [event.target.name]: event.target.value });
+    setError("");
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
+    try {
+      const user = await userApi.login(credentials);
+      setCredentials(user);
+      navigate("/");
+    } catch (error) {
+      setError("Login Failed - Try Again");
+    }
   }
   return (
     <Container component="main" maxWidth="xs">
@@ -43,6 +64,7 @@ export default function SignupForm({ handleRegOrLog }) {
             label="Email Address"
             name="email"
             autoComplete="email"
+            onChange={handleChange}
             autoFocus
           />
           <TextField
@@ -53,6 +75,7 @@ export default function SignupForm({ handleRegOrLog }) {
             label="Password"
             type="password"
             id="password"
+            onChange={handleChange}
             autoComplete="current-password"
           />
           <FormControlLabel

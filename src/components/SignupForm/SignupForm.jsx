@@ -1,24 +1,24 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Box,
   Avatar,
   TextField,
-  Checkbox,
   Typography,
   Grid,
-  Link,
   Button,
-  FormControl,
-  FormControlLabel,
   InputAdornment,
   IconButton,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import CssBaseline from "@mui/material/CssBaseline";
+import * as usersApi from "../../utilities/users-api";
 
 export default function SignupForm({ handleRegOrLog }) {
+  const navigate = useNavigate();
+
   // Manage State for User Registration
   const [registration, setRegistration] = useState({
     name: "",
@@ -45,6 +45,13 @@ export default function SignupForm({ handleRegOrLog }) {
   // Make API call to create user
   async function handleSubmit(event) {
     event.preventDefault();
+    try {
+      const newUser = await usersApi.signUp(registration);
+      setRegistration(newUser);
+      navigate("/");
+    } catch (error) {
+      setError("Signup Failed - Try Again");
+    }
   }
 
   //Toggle password visibility
@@ -91,7 +98,6 @@ export default function SignupForm({ handleRegOrLog }) {
             name="email"
             autoComplete="email"
             onChange={handleChange}
-            autoFocus
           />
           <TextField
             margin="normal"
