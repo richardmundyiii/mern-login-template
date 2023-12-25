@@ -12,13 +12,18 @@ import {
   ListItemText,
   List,
   Box,
+  Menu,
+  MenuItem,
   Typography,
+  Avatar,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 
 export default function NavBar({ user }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(false);
+  const open = Boolean(anchorEl);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -39,7 +44,17 @@ export default function NavBar({ user }) {
     </List>
   );
 
-  function handleLogOut() {}
+  function handleUserMenu(event) {
+    setAnchorEl(event.currentTarget);
+  }
+
+  function handleCloseUserMenu(event) {
+    setAnchorEl(null);
+  }
+
+  function handleLogOut(event) {
+    console.log("working");
+  }
 
   return (
     <Container>
@@ -56,9 +71,6 @@ export default function NavBar({ user }) {
               <MenuIcon />
             </IconButton>
           )}
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Logo
-          </Typography>
           {!isMobile && (
             <Box sx={{ display: "flex" }}>
               {navLinks.map(({ title, path }) => (
@@ -68,15 +80,46 @@ export default function NavBar({ user }) {
               ))}
             </Box>
           )}
-          {user ? (
-            <Button color="inherit" onClick={handleLogOut}>
-              Logout
-            </Button>
-          ) : (
-            <Button color="inherit" component={Link} to="/auth">
-              Login
-            </Button>
-          )}
+          <Box sx={{ flexGrow: 1 }} />
+          <Box
+            sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
+            <IconButton onClick={handleUserMenu} color="inherit" size="large">
+              <Avatar src={user ? user.img : "default_avatar.png"} />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={open}
+              onClose={handleCloseUserMenu}>
+              {user ? (
+                <>
+                  <MenuItem
+                    onClick={handleCloseUserMenu}
+                    component={Link}
+                    to="/profile">
+                    Profile
+                  </MenuItem>
+                  <MenuItem onClick={handleLogOut}>Logout</MenuItem>
+                </>
+              ) : (
+                <MenuItem
+                  onClick={handleCloseUserMenu}
+                  component={Link}
+                  to="/auth">
+                  Login
+                </MenuItem>
+              )}
+            </Menu>
+          </Box>
         </Toolbar>
       </AppBar>
       <Drawer
